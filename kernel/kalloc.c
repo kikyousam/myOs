@@ -80,3 +80,23 @@ kalloc(void)
     memset((char*)r, 5, PGSIZE); // fill with junk
   return (void*)r;
 }
+
+uint64 kfreemem(void) {
+  uint64 pages = 0;
+  struct run *r;
+
+  // 1. 保护链表操作
+  acquire(&kmem.lock);
+  
+  // 2. 遍历链表
+  r = kmem.freelist;
+  while (r) {  // 循环条件是什么？
+      pages++;
+      r = r->next;   // 如何移动到下一个节点？
+  }
+
+  release(&kmem.lock);
+
+  // 3. 返回字节数
+  return pages * PGSIZE;  // 这里需要填什么？
+}

@@ -10,9 +10,9 @@ sub entry {
     my $name = shift;
     print ".global $name\n";
     print "${name}:\n";
-    print " li a7, SYS_${name}\n";
-    print " ecall\n";
-    print " ret\n";
+    print " li a7, SYS_${name}\n"; # 将系统调用号SYS_trace（如22）加载到a7
+    print " ecall\n";              # 触发软中断，进入内核
+    print " ret\n"; 
 }
 	
 entry("fork");
@@ -36,3 +36,5 @@ entry("getpid");
 entry("sbrk");
 entry("sleep");
 entry("uptime");
+entry("trace");
+entry("sysinfo");
