@@ -75,6 +75,29 @@ int
 sys_pgaccess(void)
 {
   // lab pgtbl: your code here.
+  uint64 start_va;
+  int n_pages;
+  uint64 bitmask_addr;
+  argaddr(0, &start_va);
+  argint(1, &n_pages);
+  argaddr(2, &bitmask_addr);
+  if(n_pages < 0 || n_pages > 64) return -1;
+  struct proc* p =myproc();
+  uint64 mask = 0;
+  for(int i = 0; i < n_pages; ++i)
+  {
+    uint64 va = start_va + i*PGSIZE;
+    pte_t* pte = walk(p->pagetable,va, 0);
+    if(pte && (*pte & PTE_V) && (*pte & PTE_A))
+    {
+      mask |= 1UL << i;      //设置对应位
+      *pte &= ~PTE_A;         //清除访问标志位
+      sfence_vma();          //修改 PTE 后必须调用 `sfence_vma()` 使旧 TLB 失效，确保后续访问使用新 PTE.刷新TLB
+    }
+  }
+  int bytes = (n_pages + 7) / 8;
+  if(copyout(p->pagetable, bitmask_addr, (char *)&mask, bytes) < 0)
+    return -1;
   return 0;
 }
 #endif

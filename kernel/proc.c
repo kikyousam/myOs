@@ -132,6 +132,17 @@ found:
     return 0;
   }
 
+  #ifdef LAB_PGTBL
+  // Allocate a usyscall page.
+  p->usyscall = (struct usyscall *)kalloc();
+  if(!p->usyscall) {
+    freeproc(p);
+    release(&p->lock);
+    return 0;
+  }
+  p->usyscall->pid = p->pid;
+  // printf("allocproc: usyscall->pid = %d\n", p->usyscall->pid);
+  #endif
   // An empty user page table.
   p->pagetable = proc_pagetable(p);
   if(p->pagetable == 0){
@@ -160,6 +171,13 @@ freeproc(struct proc *p)
   p->trapframe = 0;
   if(p->pagetable)
     proc_freepagetable(p->pagetable, p->sz);
+  #ifdef LAB_PGTBL
+  if (p->usyscall) {
+    kfree((void *)p->usyscall);
+    p->usyscall = 0;
+    // printf("freeproc: freed usyscall page at %p\n", p->usyscall);
+  }
+  #endif
   p->pagetable = 0;
   p->sz = 0;
   p->pid = 0;
@@ -201,6 +219,17 @@ proc_pagetable(struct proc *p)
     uvmfree(pagetable, 0);
     return 0;
   }
+  #ifdef LAB_PGTBL
+  uint64 physaddr = (uint64)p->usyscall;
+  // printf("proc_pagetable: mapped USYSCALL at %p to physaddr %p\n", USYSCALL, physaddr);
+  if(mappages(pagetable, USYSCALL, PGSIZE,
+              physaddr, PTE_U | PTE_R) <0){
+    uvmunmap(pagetable, TRAMPOLINE, 1, 0);
+    uvmunmap(pagetable, TRAPFRAME, 1, 0);
+    uvmfree(pagetable, 0);
+    return 0;
+  }
+  #endif
 
   return pagetable;
 }
@@ -212,6 +241,9 @@ proc_freepagetable(pagetable_t pagetable, uint64 sz)
 {
   uvmunmap(pagetable, TRAMPOLINE, 1, 0);
   uvmunmap(pagetable, TRAPFRAME, 1, 0);
+  #ifdef LAB_PGTBL
+  uvmunmap(pagetable, USYSCALL, 1, 0);
+  #endif 
   uvmfree(pagetable, sz);
 }
 
