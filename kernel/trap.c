@@ -77,8 +77,20 @@ usertrap(void)
     exit(-1);
 
   // give up the CPU if this is a timer interrupt.
-  if(which_dev == 2)
+  if(which_dev == 2){
+    p->ticks_passed++;
+    if(p->interval >0 && p->ticks_passed >= p->interval && p->handler_active == 0){
+        if(p->trapframe_copy == 0){
+          p->trapframe_copy = kalloc();
+          *p->trapframe_copy = *p->trapframe;
+          printf("Interrupt! Saved a0: %p\n", p->trapframe_copy->a0);
+        }
+        p->handler_active = 1;
+        p->trapframe->epc = (uint64)p->handle;
+        p->ticks_passed = 0;
+    }
     yield();
+  }
 
   usertrapret();
 }

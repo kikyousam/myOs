@@ -51,6 +51,7 @@ sys_sbrk(void)
 uint64
 sys_sleep(void)
 {
+  backtrace();
   int n;
   uint ticks0;
 
@@ -90,4 +91,40 @@ sys_uptime(void)
   xticks = ticks;
   release(&tickslock);
   return xticks;
+}
+
+uint64
+sys_sigalarm(void)
+{
+  int interval;
+  uint64 handler; // 临时变量存储用户传入的地址
+  struct proc *p = myproc();
+
+  // 获取用户参数并检查错误
+  argint(0, &interval);
+  argaddr(1, &handler);
+  // printf("sys_sigalarm: interval=%d, handler=%p\n", interval, handler);
+
+  // 赋值到 proc 结构体，并强制类型转换
+  p->interval = interval;
+  p->handle = (void (*)(void))handler; // 关键转换
+  // printf("proc->interval=%d, proc->handler=%p\n", p->interval, p->handle);
+  return 0;
+}
+
+uint64
+sys_sigreturn(void)
+{
+  struct proc *p = myproc();
+  if(p->trapframe_copy){
+    *p->trapframe = *p->trapframe_copy;
+    uint64 saved_a0 = p->trapframe_copy->a0;
+    printf("Restoring a0: %p\n", p->trapframe->a0);
+    kfree(p->trapframe_copy);
+    p->trapframe_copy = 0;
+  
+    p->handler_active = 0;
+    return saved_a0;
+  }
+  return -1;
 }

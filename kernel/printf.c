@@ -118,6 +118,7 @@ printf(char *fmt, ...)
 void
 panic(char *s)
 {
+  backtrace();
   pr.locking = 0;
   printf("panic: ");
   printf(s);
@@ -132,4 +133,34 @@ printfinit(void)
 {
   initlock(&pr.lock, "pr");
   pr.locking = 1;
+}
+
+
+void
+backtrace(void)
+{
+  uint64 fp = r_fp();
+  printf("Initial FP: %p\n", fp);
+  uint64 bottom = PGROUNDDOWN(fp);
+  uint64 top = PGROUNDUP(fp);
+  printf("Stack Page: [%p, %p)\n", bottom, top);
+
+  printf("backtrace:\n");
+  while(fp >= bottom && fp < top)
+  {
+    //1. 提取返回地址(fp-8)
+    uint64 return_addr = *(uint64 *)(fp -8);
+    printf("%p\n", return_addr);
+
+    //2. 获取前一个帧指针（fp-16)
+    uint64 prev_fp = *(uint64 *)(fp - 16);
+    printf("Current FP: %p, Prev FP: %p\n", fp, prev_fp);
+
+    //3. 终止条件： prev_fp无效或超出当前帧页
+    if(prev_fp <= bottom || prev_fp > top || prev_fp < fp){
+      break;
+    }
+
+    fp = prev_fp;
+  }
 }
