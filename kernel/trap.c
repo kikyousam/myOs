@@ -36,6 +36,7 @@ trapinithart(void)
 void
 usertrap(void)
 {
+  // printf("usertrap: scause=%p stval=%p\n", r_scause(), r_stval());
   int which_dev = 0;
 
   if((r_sstatus() & SSTATUS_SPP) != 0)
@@ -67,7 +68,19 @@ usertrap(void)
     syscall();
   } else if((which_dev = devintr()) != 0){
     // ok
-  } else {
+  } else if(r_scause() == 13 || r_scause() == 15){
+    uint64 stval = r_stval();
+    if (is_cow_fault(p->pagetable, stval)) {
+      if (handle_cow_fault(p->pagetable, stval) < 0) {
+        printf("usertrap(): alloc failed!\n"); 
+        p->killed = 1;   // 当内存分配完，直接kill
+      }
+    }else {
+      goto unexpected;
+    }
+  }
+  else {
+unexpected:
     printf("usertrap(): unexpected scause %p pid=%d\n", r_scause(), p->pid);
     printf("            sepc=%p stval=%p\n", r_sepc(), r_stval());
     setkilled(p);

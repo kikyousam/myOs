@@ -308,22 +308,25 @@ uvmcopy(pagetable_t old, pagetable_t new, uint64 sz)
   pte_t *pte;
   uint64 pa, i;
   uint flags;
-  char *mem;
 
   for(i = 0; i < sz; i += PGSIZE){
     if((pte = walk(old, i, 0)) == 0)
       panic("uvmcopy: pte should exist");
     if((*pte & PTE_V) == 0)
       panic("uvmcopy: page not present");
+    if (*pte & PTE_W) // 对于本身可写的页才去取消写权限
+    {
+      *pte &= (~PTE_W);
+      *pte |= PTE_RSW;
+    }
     pa = PTE2PA(*pte);
     flags = PTE_FLAGS(*pte);
-    if((mem = kalloc()) == 0)
-      goto err;
-    memmove(mem, (char*)pa, PGSIZE);
-    if(mappages(new, i, PGSIZE, (uint64)mem, flags) != 0){
-      kfree(mem);
+    if(mappages(new, i, PGSIZE, pa, flags) != 0){
       goto err;
     }
+    acquire(&ref_cnt_lock);
+    ref_count[PA2IDX(pa)]++;
+    release(&ref_cnt_lock);
   }
   return 0;
 
@@ -355,6 +358,12 @@ copyout(pagetable_t pagetable, uint64 dstva, char *src, uint64 len)
 
   while(len > 0){
     va0 = PGROUNDDOWN(dstva);
+     if (is_cow_fault(pagetable, va0)) {
+      if (handle_cow_fault(pagetable, va0) < 0) {
+        printf("copyout(): alloc failed!\n");
+        return -1;
+      }
+    }
     pa0 = walkaddr(pagetable, va0);
     if(pa0 == 0)
       return -1;
@@ -436,4 +445,43 @@ copyinstr(pagetable_t pagetable, char *dst, uint64 srcva, uint64 max)
   } else {
     return -1;
   }
+}
+
+int 
+is_cow_fault(pagetable_t pagetable, uint64 va)
+{
+  if (va >= MAXVA)
+    return 0;
+  pte_t* pte = walk(pagetable, va, 0);
+  return pte && (*pte & PTE_V) && (*pte & PTE_U) && (*pte & PTE_RSW);
+}
+
+int
+handle_cow_fault(pagetable_t pagetable, uint64 va)
+{
+  va = PGROUNDDOWN(va);
+  pte_t* pte = walk(pagetable, va, 0);
+  if (!pte) {
+    return -1;
+  }
+  uint64 pa = PTE2PA(*pte);
+  uint flags = (PTE_FLAGS(*pte) & ~PTE_RSW) | PTE_W;  // 取消写时复制标志，设置写权限
+
+  char* mem = kalloc();
+  if (!mem) {
+    return -1;
+  }
+  memmove(mem, (char*)pa, PGSIZE);
+  uvmunmap(pagetable, va, 1, 0);  // 取消映射 当解除映射时，若do_free=1，会调用kfree释放物理页，但该页可能仍被其他进程共享。正确做法是仅解除映射而不释放页面，由引用计数管理释放
+
+  // 减少原页面的引用计数
+  acquire(&ref_cnt_lock);
+  ref_count[PA2IDX(pa)]--;
+  release(&ref_cnt_lock);
+
+  if (mappages(pagetable, va, PGSIZE, (uint64)mem, flags) != 0) {
+    kfree(mem);
+    return -1;
+  }
+  return 0;
 }
