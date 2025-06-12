@@ -22,15 +22,32 @@ barrier_init(void)
   bstate.nthread = 0;
 }
 
-static void 
-barrier()
-{
-  // YOUR CODE HERE
-  //
-  // Block until all threads have called barrier() and
-  // then increment bstate.round.
-  //
-  
+void barrier(void) {
+    // 上锁（保护共享状态）
+    pthread_mutex_lock(&bstate.barrier_mutex);
+
+    // 记录当前轮次（避免后续被修改）
+    int current_round = bstate.round;
+
+    // 增加到达线程数
+    bstate.nthread++;
+
+    // 情况 1：所有线程已到达
+    if (bstate.nthread == nthread) {
+        bstate.round++;      // 轮次 +1（关键！）
+        bstate.nthread = 0;  // 重置计数器（用于下一轮）
+        pthread_cond_broadcast(&bstate.barrier_cond); // 唤醒所有线程
+    } 
+    // 情况 2：还有线程未到达
+    else {
+        // 循环等待条件：当前轮次未改变（防止虚假唤醒）
+        while (bstate.round == current_round) {
+            pthread_cond_wait(&bstate.barrier_cond, &bstate.barrier_mutex);
+        }
+    }
+
+    // 解锁
+    pthread_mutex_unlock(&bstate.barrier_mutex);
 }
 
 static void *

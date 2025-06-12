@@ -11,13 +11,33 @@
 #define MAX_THREAD  4
 
 
+typedef struct ucontext{
+  uint64 ra;
+  uint64 sp;
+
+  // callee-saved
+  uint64 s0;
+  uint64 s1;
+  uint64 s2;
+  uint64 s3;
+  uint64 s4;
+  uint64 s5;
+  uint64 s6;
+  uint64 s7;
+  uint64 s8;
+  uint64 s9;
+  uint64 s10;
+  uint64 s11;
+}ucontext;
+
 struct thread {
   char       stack[STACK_SIZE]; /* the thread's stack */
   int        state;             /* FREE, RUNNING, RUNNABLE */
+  ucontext   context;
 };
 struct thread all_thread[MAX_THREAD];
 struct thread *current_thread;
-extern void thread_switch(uint64, uint64);
+extern void thread_switch(struct ucontext*, struct ucontext*);
               
 void 
 thread_init(void)
@@ -62,6 +82,7 @@ thread_schedule(void)
      * Invoke thread_switch to switch from t to next_thread:
      * thread_switch(??, ??);
      */
+    thread_switch(&t->context, &next_thread->context);
   } else
     next_thread = 0;
 }
@@ -76,6 +97,9 @@ thread_create(void (*func)())
   }
   t->state = RUNNABLE;
   // YOUR CODE HERE
+  t->context.sp = (uint64)t->stack + STACK_SIZE;    //设置线程的栈指针
+  t->context.ra = (uint64)func;
+  printf("sp=%p ra=%p\n", t->context.sp, t->context.ra);
 }
 
 void 
