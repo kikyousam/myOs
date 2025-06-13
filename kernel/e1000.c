@@ -102,7 +102,21 @@ e1000_transmit(struct mbuf *m)
   // the TX descriptor ring so that the e1000 sends it. Stash
   // a pointer so that it can be freed after sending.
   //
-  
+  uint32 idx = regs[E1000_TDT]; // 读取传输描述符尾指针
+  struct tx_desc *desc = &tx_ring[idx];
+  if (!(desc->status & E1000_TXD_STAT_DD)) {
+      return -1; // 描述符未释放，环满
+  }
+  if (tx_mbufs[idx]) {
+      mbuffree(tx_mbufs[idx]); // 释放已发送的 mbuf
+  }
+  desc->addr = (uint64)m->head; // 数据物理地址
+  desc->length = m->len;        // 数据长度
+  desc->cmd = E1000_TXD_CMD_EOP | // 包结束标志
+              E1000_TXD_CMD_RS;   // 请求状态报告
+  desc->status = 0;             // 清除状态位
+  tx_mbufs[idx] = m;            // 保存 mbuf 供后续释放
+  regs[E1000_TDT] = (idx + 1) % TX_RING_SIZE; // 更新尾指针
   return 0;
 }
 
@@ -115,6 +129,26 @@ e1000_recv(void)
   // Check for packets that have arrived from the e1000
   // Create and deliver an mbuf for each packet (using net_rx()).
   //
+  acquire(&e1000_lock);
+  uint32 rdt = regs[E1000_RDT];
+  uint32 idx = (rdt + 1) % RX_RING_SIZE;
+  struct rx_desc *desc = &rx_ring[idx];
+  while (desc->status & E1000_RXD_STAT_DD) { // 设备已写数据
+    struct mbuf *m = rx_mbufs[idx];   // 获取 mbuf
+    m->len = desc->length;            // 更新数据长度
+    net_rx(m);                        // 传递给网络栈
+    if (!(m = mbufalloc(0))) {
+        panic("e1000: mbufalloc failed");
+    }
+    rx_mbufs[idx] = m;                // 缓存新 mbuf
+    desc->addr = (uint64)m->head;     // 设置新缓冲区地址
+    desc->status = 0;                 // 清除状态位
+    rdt = idx;
+    idx = (idx + 1) % RX_RING_SIZE;
+    desc = &rx_ring[idx];             // 检查下一个描述符
+  }
+  regs[E1000_RDT] = rdt; // 更新接收描述符尾指针
+  release(&e1000_lock);
 }
 
 void
