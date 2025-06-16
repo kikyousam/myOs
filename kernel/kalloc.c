@@ -19,25 +19,39 @@ struct run {
 };
 
 struct {
-  struct spinlock lock;
-  struct run *freelist;
-} kmem;
+  struct spinlock lock[NCPU];
+  struct run *freelist[NCPU];
+} kmemPerCpu;
 
 void
 kinit()
 {
-  initlock(&kmem.lock, "kmem");
+  push_off();
+  for(int i = 0; i < NCPU; ++i) {
+    initlock(&kmemPerCpu.lock[i], "kmemPerCpu");
+  }
   freerange(end, (void*)PHYSTOP);
+  pop_off();
 }
 
-void
-freerange(void *pa_start, void *pa_end)
-{
-  char *p;
-  p = (char*)PGROUNDUP((uint64)pa_start);
-  for(; p + PGSIZE <= (char*)pa_end; p += PGSIZE)
-    kfree(p);
+void freerange(void *pa_start, void *pa_end) {
+  char *p = (char*)PGROUNDUP((uint64)pa_start);
+  int cpuId = 0;  // 让所有 CPU 轮流分配内存块
+
+  for (; p + PGSIZE <= (char*)pa_end; p += PGSIZE) {
+    struct run *r = (struct run*)p;
+    push_off();
+    acquire(&kmemPerCpu.lock[cpuId]);
+    r->next = kmemPerCpu.freelist[cpuId];
+    kmemPerCpu.freelist[cpuId] = r;
+    release(&kmemPerCpu.lock[cpuId]);
+    pop_off();
+
+    // 轮流切换到下一个 CPU，避免所有块分配给同一个 CPU
+    cpuId = (cpuId + 1) % NCPU;
+  }
 }
+
 
 // Free the page of physical memory pointed at by pa,
 // which normally should have been returned by a
@@ -55,11 +69,13 @@ kfree(void *pa)
   memset(pa, 1, PGSIZE);
 
   r = (struct run*)pa;
-
-  acquire(&kmem.lock);
-  r->next = kmem.freelist;
-  kmem.freelist = r;
-  release(&kmem.lock);
+  push_off();
+  int cpuId = cpuid();
+  acquire(&kmemPerCpu.lock[cpuId]);
+  r->next = kmemPerCpu.freelist[cpuId];
+  kmemPerCpu.freelist[cpuId] = r;
+  release(&kmemPerCpu.lock[cpuId]);
+  pop_off();
 }
 
 // Allocate one 4096-byte page of physical memory.
@@ -70,12 +86,28 @@ kalloc(void)
 {
   struct run *r;
 
-  acquire(&kmem.lock);
-  r = kmem.freelist;
+  push_off();
+  int cpuId = cpuid();
+  acquire(&kmemPerCpu.lock[cpuId]);
+  r = kmemPerCpu.freelist[cpuId];
   if(r)
-    kmem.freelist = r->next;
-  release(&kmem.lock);
+    kmemPerCpu.freelist[cpuId] = r->next;
+  else{
+    for(int i = 0; i < NCPU; ++i){
+    if(i == cpuId) continue;
+    acquire(&kmemPerCpu.lock[i]);
+    r = kmemPerCpu.freelist[i];
+    if(r) { // 找到空闲块后立刻退出循环
+      kmemPerCpu.freelist[i] = r->next; // 正确更新该 CPU 的 free list
+      release(&kmemPerCpu.lock[i]);
+      break;  // 立即停止循环
+    }
+    release(&kmemPerCpu.lock[i]);
+  }
 
+  }
+  release(&kmemPerCpu.lock[cpuId]);
+  pop_off();
   if(r)
     memset((char*)r, 5, PGSIZE); // fill with junk
   return (void*)r;
