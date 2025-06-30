@@ -95,8 +95,8 @@ bread(uint dev, uint blockno)
   struct buf *b;
 
   b = bget(dev, blockno);
-  if(!b->valid) {
-    virtio_disk_rw(b, 0);
+  if (!b->valid) {
+    virtio_disk_rw(b, 0);     //将当前块从磁盘中读取出来
     b->valid = 1;
   }
   return b;
@@ -108,7 +108,7 @@ bwrite(struct buf *b)
 {
   if(!holdingsleep(&b->lock))
     panic("bwrite");
-  virtio_disk_rw(b, 1);
+  virtio_disk_rw(b, 1);     ////将当前块写入磁盘,disk层操作
 }
 
 // Release a locked buffer.

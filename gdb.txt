@@ -1,0 +1,479 @@
+$38 = {dev = 1, inum = 24, ref = 1, lock = {locked = 1, lk = {locked = 0, name = 0x80008690 "sleep lock", cpu = 0x0}, name = 0x80008538 "inode", pid = 3}, valid = 1, type = 0, major = 0, minor = 0, nlink = 0, size = 0, addrs = {0 <repeats 13 times>}}
+#2  0x0000000080004b16 in sys_unlink () at kernel/sysfile.c:245
+$39 = 47 '/'
+$40 = 98 'b'
+$1 = {dev = 1, inum = 23, ref = 1, lock = {locked = 1, lk = {locked = 0, name = 0x8000b5b0 "sleep lock", cpu = 0x0}, name = 0x8000b430 "inode", pid = 3}, valid = 1, type = 2, major = 0, minor = 0, nlink = 0, size = 0, addrs = {0 <repeats 13 times>}}
+$2 = {valid = 1, disk = 0, dev = 1, blockno = 33, lock = {locked = 1, lk = {locked = 0, name = 0x8000b5b0 "sleep lock", cpu = 0x0}, name = 0x8000b3b0 "buffer", pid = 3}, refcnt = 2, prev = 0x80014e58 <bcache+33384>, next = 0x8000e618 <bcache+6696>, data = "\002\000\000\000\000\000\001\000\240{\000\000\346\001\000\000\347\001\000\000\350\001\000\000\351\001\000\000\352\001\000\000\353\001\000\000\354\001\000\000\355\001\000\000\356\001\000\000\357\001\000\000\360\001\000\000\361\001\000\000\000\000\000\000\002\000\000\000\000\000\001\000\270]\000\000\006\002\000\000\a\002\000\000\b\002\000\000\t\002\000\000\n\002\000\000\v\002\000\000\f\002\000\000\r\002\000\000\016\002\000\000\017\002\000\000\020\002\000\000\021\002\000\000\000\000\000\000\002\000\000\000\000\000\001\000\360Y\000\000\037\002\000\000 \002\000\000!\002\000\000\"\002\000\000#\002\000\000$\002\000\000%\002\000\000&\002\000\000'\002\000\000(\002\000\000)\002\000\000*\002\000\000\000\000\000\000\002\000\000\000\000\000\001\000"...}
+log_write (b=0x8000f778 <bcache+11144>) at kernel/log.c:219
+$3 = 2
+iupdate (ip=0x80015480 <itable+432>) at kernel/fs.c:266
+sys_unlink () at kernel/sysfile.c:265
+
+Breakpoint 6, iput (ip=0x80015480 <itable+432>) at kernel/fs.c:366
+$4 = {dev = 1, inum = 23, ref = 1, lock = {locked = 0, lk = {locked = 0, name = 0x8000b5b0 "sleep lock", cpu = 0x0}, name = 0x8000b430 "inode", pid = 0}, valid = 1, type = 2, major = 0, minor = 0, nlink = 0, size = 0, addrs = {0 <repeats 13 times>}}
+
+Breakpoint 8, iupdate (ip=0x80015480 <itable+432>) at kernel/fs.c:257
+#0  iupdate (ip=0x80015480 <itable+432>) at kernel/fs.c:257
+#1  0x0000000080004650 in itrunc (ip=0x80015480 <itable+432>) at kernel/fs.c:582
+#2  0x0000000080004010 in iput (ip=0x80015480 <itable+432>) at kernel/fs.c:379
+#3  0x00000000800040ce in iunlockput (ip=0x80015480 <itable+432>) at kernel/fs.c:402
+#4  0x0000000080006ec6 in sys_unlink () at kernel/sysfile.c:265
+#5  0x0000000080002f36 in syscall () at kernel/syscall.c:143
+#6  0x000000008000286c in usertrap () at kernel/trap.c:67
+#7  0x0000000000000062 in ?? ()
+itrunc (ip=0x80015480 <itable+432>) at kernel/fs.c:583
+iput (ip=0x80015480 <itable+432>) at kernel/fs.c:380
+
+Breakpoint 8, iupdate (ip=0x80015480 <itable+432>) at kernel/fs.c:257
+#0  iupdate (ip=0x80015480 <itable+432>) at kernel/fs.c:257
+#1  0x0000000080004024 in iput (ip=0x80015480 <itable+432>) at kernel/fs.c:381
+#2  0x00000000800040ce in iunlockput (ip=0x80015480 <itable+432>) at kernel/fs.c:402
+#3  0x0000000080006ec6 in sys_unlink () at kernel/sysfile.c:265
+#4  0x0000000080002f36 in syscall () at kernel/syscall.c:143
+#5  0x000000008000286c in usertrap () at kernel/trap.c:67
+#6  0x0000000000000062 in ?? ()
+Run till exit from #0  iupdate (ip=0x80015480 <itable+432>) at kernel/fs.c:257
+iput (ip=0x80015480 <itable+432>) at kernel/fs.c:382
+$5 = {dev = 1, inum = 23, ref = 0, lock = {locked = 0, lk = {locked = 0, name = 0x8000b5b0 "sleep lock", cpu = 0x0}, name = 0x8000b430 "inode", pid = 0}, valid = 0, type = 0, major = 0, minor = 0, nlink = 0, size = 0, addrs = {0 <repeats 13 times>}}
+iunlockput (ip=0x80015480 <itable+432>) at kernel/fs.c:403
+sys_unlink () at kernel/sysfile.c:267
+usertrap () at kernel/trap.c:76
+
+Breakpoint 2, sys_unlink () at kernel/sysfile.c:228
+Undefined command: "nn".  Try "help".
+$6 = "\230\271\000\200\000\000\000\000\230\271\000\200\000"
+$7 = 152 '\230'
+$8 = {0x98, 0xb9, 0x0, 0x80, 0x0, 0x0, 0x0, 0x0, 0x98, 0xb9, 0x0, 0x80, 0x0, 0x0}
+$9 = 0x3fffff9f60 "\230\271"
+0x3fffff9f60:	"\230\271"
+$10 = 0x3fffff9ee0 "/testsymlink/b"
+
+Breakpoint 5, iget (dev=1, inum=1) at kernel/fs.c:277
+#0  iget (dev=1, inum=1) at kernel/fs.c:277
+#1  0x0000000080004d3c in namex (path=0x3fffff9ee0 "/testsymlink/b", nameiparent=1, name=0x3fffff9f60 "\230\271") at kernel/fs.c:834
+#2  0x0000000080004e80 in nameiparent (path=0x3fffff9ee0 "/testsymlink/b", name=0x3fffff9f60 "\230\271") at kernel/fs.c:872
+#3  0x0000000080006d22 in sys_unlink () at kernel/sysfile.c:232
+#4  0x0000000080002f36 in syscall () at kernel/syscall.c:143
+#5  0x000000008000286c in usertrap () at kernel/trap.c:67
+#6  0x0000000000000072 in ?? ()
+$11 = {dev = 1, inum = 1, ref = 3, lock = {locked = 0, lk = {locked = 0, name = 0x8000b5b0 "sleep lock", cpu = 0x0}, name = 0x8000b430 "inode", pid = 0}, valid = 1, type = 1, major = 0, minor = 0, nlink = 2, size = 1024, addrs = {70, 0 <repeats 12 times>}}
+namex (path=0x3fffff9ee0 "/testsymlink/b", nameiparent=1, name=0x3fffff9f60 "\230\271") at kernel/fs.c:838
+
+Breakpoint 5, iget (dev=1, inum=22) at kernel/fs.c:277
+#0  iget (dev=1, inum=22) at kernel/fs.c:277
+#1  0x0000000080004af8 in dirlookup (dp=0x800152e8 <itable+24>, name=0x3fffff9f60 "testsymlink", poff=0x0) at kernel/fs.c:738
+#2  0x0000000080004dc4 in namex (path=0x3fffff9eed "b", nameiparent=1, name=0x3fffff9f60 "testsymlink") at kernel/fs.c:848
+#3  0x0000000080004e80 in nameiparent (path=0x3fffff9ee0 "/testsymlink/b", name=0x3fffff9f60 "testsymlink") at kernel/fs.c:872
+#4  0x0000000080006d22 in sys_unlink () at kernel/sysfile.c:232
+#5  0x0000000080002f36 in syscall () at kernel/syscall.c:143
+#6  0x000000008000286c in usertrap () at kernel/trap.c:67
+#7  0x0000000000000072 in ?? ()
+Undefined layout command: "none".  Try "help layout".
+
+
+Breakpoint 9, iget (dev=1, inum=22) at kernel/fs.c:292
+dirlookup (dp=0x800152e8 <itable+24>, name=0x3fffff9f60 "testsymlink", poff=0x0) at kernel/fs.c:743
+namex (path=0x3fffff9eed "b", nameiparent=1, name=0x3fffff9f60 "testsymlink") at kernel/fs.c:852
+
+Breakpoint 6, iput (ip=0x800152e8 <itable+24>) at kernel/fs.c:366
+iunlockput (ip=0x800152e8 <itable+24>) at kernel/fs.c:403
+namex (path=0x3fffff9eed "b", nameiparent=1, name=0x3fffff9f60 "testsymlink") at kernel/fs.c:853
+nameiparent (path=0x3fffff9ee0 "/testsymlink/b", name=0x3fffff9f60 "b") at kernel/fs.c:873
+sys_unlink () at kernel/sysfile.c:237
+
+Breakpoint 6, iput (ip=0x800153f8 <itable+296>) at kernel/fs.c:366
+#0  iput (ip=0x800153f8 <itable+296>) at kernel/fs.c:366
+#1  0x00000000800040ce in iunlockput (ip=0x800153f8 <itable+296>) at kernel/fs.c:402
+#2  0x0000000080006ee4 in sys_unlink () at kernel/sysfile.c:272
+#3  0x0000000080002f36 in syscall () at kernel/syscall.c:143
+#4  0x000000008000286c in usertrap () at kernel/trap.c:67
+#5  0x0000000000000072 in ?? ()
+
+Breakpoint 2, sys_unlink () at kernel/sysfile.c:228
+#0  sys_unlink () at kernel/sysfile.c:228
+#1  0x0000000080002f36 in syscall () at kernel/syscall.c:143
+#2  0x000000008000286c in usertrap () at kernel/trap.c:67
+#3  0x0000000000000082 in ?? ()
+
+Breakpoint 5, iget (dev=1, inum=1) at kernel/fs.c:277
+namex (path=0x3fffff9ee0 "/testsymlink/c", nameiparent=1, name=0x3fffff9f60 "\230\271") at kernel/fs.c:838
+
+Breakpoint 5, iget (dev=1, inum=22) at kernel/fs.c:277
+
+Breakpoint 9, iget (dev=1, inum=22) at kernel/fs.c:292
+
+Breakpoint 6, iput (ip=0x800152e8 <itable+24>) at kernel/fs.c:366
+
+Breakpoint 6, iput (ip=0x800153f8 <itable+296>) at kernel/fs.c:366
+
+Breakpoint 2, sys_unlink () at kernel/sysfile.c:228
+
+Breakpoint 5, iget (dev=1, inum=1) at kernel/fs.c:277
+
+Breakpoint 5, iget (dev=1, inum=22) at kernel/fs.c:277
+
+Breakpoint 9, iget (dev=1, inum=22) at kernel/fs.c:292
+
+Breakpoint 6, iput (ip=0x800152e8 <itable+24>) at kernel/fs.c:366
+
+Breakpoint 6, iput (ip=0x800153f8 <itable+296>) at kernel/fs.c:366
+
+Breakpoint 2, sys_unlink () at kernel/sysfile.c:228
+
+Breakpoint 5, iget (dev=1, inum=1) at kernel/fs.c:277
+
+Breakpoint 5, iget (dev=1, inum=22) at kernel/fs.c:277
+
+Breakpoint 9, iget (dev=1, inum=22) at kernel/fs.c:292
+
+Breakpoint 6, iput (ip=0x800152e8 <itable+24>) at kernel/fs.c:366
+
+Breakpoint 6, iput (ip=0x800153f8 <itable+296>) at kernel/fs.c:366
+
+Breakpoint 2, sys_unlink () at kernel/sysfile.c:228
+
+Breakpoint 5, iget (dev=1, inum=1) at kernel/fs.c:277
+
+Breakpoint 5, iget (dev=1, inum=22) at kernel/fs.c:277
+
+Breakpoint 9, iget (dev=1, inum=22) at kernel/fs.c:292
+
+Breakpoint 6, iput (ip=0x800152e8 <itable+24>) at kernel/fs.c:366
+
+Breakpoint 6, iput (ip=0x800153f8 <itable+296>) at kernel/fs.c:366
+
+Breakpoint 2, sys_unlink () at kernel/sysfile.c:228
+
+Breakpoint 5, iget (dev=1, inum=1) at kernel/fs.c:277
+
+Breakpoint 5, iget (dev=1, inum=22) at kernel/fs.c:277
+
+Breakpoint 9, iget (dev=1, inum=22) at kernel/fs.c:292
+
+Breakpoint 6, iput (ip=0x800152e8 <itable+24>) at kernel/fs.c:366
+
+Breakpoint 6, iput (ip=0x800153f8 <itable+296>) at kernel/fs.c:366
+
+Breakpoint 2, sys_unlink () at kernel/sysfile.c:228
+
+Breakpoint 5, iget (dev=1, inum=1) at kernel/fs.c:277
+
+Breakpoint 5, iget (dev=1, inum=22) at kernel/fs.c:277
+Num     Type           Disp Enb Address            What
+1       breakpoint     keep y   0x00000000800079ba in sys_symlink at kernel/sysfile.c:674
+2       breakpoint     keep y   0x0000000080006ce8 in sys_unlink at kernel/sysfile.c:228
+	breakpoint already hit 8 times
+3       breakpoint     keep y   0x0000000080007136 in recusivecallsymlink at kernel/sysfile.c:382
+4       breakpoint     keep y   0x0000000080009414 in panic at kernel/printf.c:121
+5       breakpoint     keep y   0x0000000080003c90 in iget at kernel/fs.c:277
+	breakpoint already hit 24 times
+6       breakpoint     keep y   0x0000000080003f7e in iput at kernel/fs.c:366
+	breakpoint already hit 24 times
+7       breakpoint     keep y   0x0000000080003a8a in ialloc at kernel/fs.c:229
+8       breakpoint     keep y   0x0000000080003b9e in iupdate at kernel/fs.c:257
+	breakpoint already hit 4 times
+9       breakpoint     keep y   0x0000000080003d36 in iget at kernel/fs.c:292
+	breakpoint already hit 6 times
+
+Breakpoint 9, iget (dev=1, inum=22) at kernel/fs.c:292
+
+Breakpoint 6, iput (ip=0x800152e8 <itable+24>) at kernel/fs.c:366
+
+Breakpoint 6, iput (ip=0x800153f8 <itable+296>) at kernel/fs.c:366
+
+Breakpoint 2, sys_unlink () at kernel/sysfile.c:228
+
+Breakpoint 5, iget (dev=1, inum=1) at kernel/fs.c:277
+
+Breakpoint 5, iget (dev=1, inum=22) at kernel/fs.c:277
+
+Breakpoint 9, iget (dev=1, inum=22) at kernel/fs.c:292
+
+Breakpoint 6, iput (ip=0x800152e8 <itable+24>) at kernel/fs.c:366
+
+Breakpoint 6, iput (ip=0x800153f8 <itable+296>) at kernel/fs.c:366
+
+Breakpoint 2, sys_unlink () at kernel/sysfile.c:228
+
+Breakpoint 5, iget (dev=1, inum=1) at kernel/fs.c:277
+
+Breakpoint 5, iget (dev=1, inum=22) at kernel/fs.c:277
+
+Breakpoint 9, iget (dev=1, inum=22) at kernel/fs.c:292
+
+Breakpoint 8, iupdate (ip=0x800152e8 <itable+24>) at kernel/fs.c:257
+
+Breakpoint 8, iupdate (ip=0x800152e8 <itable+24>) at kernel/fs.c:257
+
+Breakpoint 6, iput (ip=0x800152e8 <itable+24>) at kernel/fs.c:366
+
+Breakpoint 8, iupdate (ip=0x800153f8 <itable+296>) at kernel/fs.c:257
+
+Breakpoint 6, iput (ip=0x800153f8 <itable+296>) at kernel/fs.c:366
+
+Breakpoint 8, iupdate (ip=0x800153f8 <itable+296>) at kernel/fs.c:257
+
+Breakpoint 8, iupdate (ip=0x800153f8 <itable+296>) at kernel/fs.c:257
+
+Breakpoint 5, iget (dev=1, inum=1) at kernel/fs.c:277
+
+Breakpoint 7, ialloc (dev=1, type=1) at kernel/fs.c:229
+
+Breakpoint 5, iget (dev=1, inum=22) at kernel/fs.c:277
+
+Breakpoint 8, iupdate (ip=0x800153f8 <itable+296>) at kernel/fs.c:257
+
+Breakpoint 8, iupdate (ip=0x800153f8 <itable+296>) at kernel/fs.c:257
+
+Breakpoint 8, iupdate (ip=0x800153f8 <itable+296>) at kernel/fs.c:257
+
+Breakpoint 8, iupdate (ip=0x800152e8 <itable+24>) at kernel/fs.c:257
+
+Breakpoint 8, iupdate (ip=0x800152e8 <itable+24>) at kernel/fs.c:257
+
+Breakpoint 6, iput (ip=0x800152e8 <itable+24>) at kernel/fs.c:366
+
+Breakpoint 6, iput (ip=0x800153f8 <itable+296>) at kernel/fs.c:366
+
+Breakpoint 5, iget (dev=1, inum=1) at kernel/fs.c:277
+
+Breakpoint 5, iget (dev=1, inum=22) at kernel/fs.c:277
+
+Breakpoint 6, iput (ip=0x800152e8 <itable+24>) at kernel/fs.c:366
+
+Breakpoint 7, ialloc (dev=1, type=2) at kernel/fs.c:229
+
+Breakpoint 5, iget (dev=1, inum=23) at kernel/fs.c:277
+
+Breakpoint 8, iupdate (ip=0x80015480 <itable+432>) at kernel/fs.c:257
+
+Breakpoint 8, iupdate (ip=0x800153f8 <itable+296>) at kernel/fs.c:257
+
+Breakpoint 6, iput (ip=0x800153f8 <itable+296>) at kernel/fs.c:366
+
+Breakpoint 1, sys_symlink () at kernel/sysfile.c:674
+
+Breakpoint 5, iget (dev=1, inum=1) at kernel/fs.c:277
+
+Breakpoint 5, iget (dev=1, inum=22) at kernel/fs.c:277
+
+Breakpoint 6, iput (ip=0x800152e8 <itable+24>) at kernel/fs.c:366
+
+Breakpoint 7, ialloc (dev=1, type=4) at kernel/fs.c:229
+
+Breakpoint 5, iget (dev=1, inum=24) at kernel/fs.c:277
+
+Breakpoint 8, iupdate (ip=0x80015508 <itable+568>) at kernel/fs.c:257
+
+Breakpoint 8, iupdate (ip=0x80015508 <itable+568>) at kernel/fs.c:257
+
+Breakpoint 8, iupdate (ip=0x800153f8 <itable+296>) at kernel/fs.c:257
+
+Breakpoint 6, iput (ip=0x800153f8 <itable+296>) at kernel/fs.c:366
+
+Breakpoint 4, panic (s=0x8000b498 "iunlock") at kernel/printf.c:121
+[Inferior 1 (process 1) exited normally]
+#0  panic (s=0x8000b498 "iunlock") at kernel/printf.c:121
+#1  0x0000000080003f56 in iunlock (ip=0x80015508 <itable+568>) at kernel/fs.c:350
+#2  0x00000000800040c2 in iunlockput (ip=0x80015508 <itable+568>) at kernel/fs.c:401
+#3  0x0000000080007b6a in sys_symlink () at kernel/sysfile.c:723
+#4  0x0000000080002f36 in syscall () at kernel/syscall.c:143
+#5  0x000000008000286c in usertrap () at kernel/trap.c:67
+#6  0x0000000000000158 in ?? ()
+#0  panic (s=0x8000b498 "iunlock") at kernel/printf.c:121
+#1  0x0000000080003f56 in iunlock (ip=0x80015508 <itable+568>) at kernel/fs.c:350
+#2  0x00000000800040c2 in iunlockput (ip=0x80015508 <itable+568>) at kernel/fs.c:401
+#3  0x0000000080007b6a in sys_symlink () at kernel/sysfile.c:723
+#4  0x0000000080002f36 in syscall () at kernel/syscall.c:143
+#5  0x000000008000286c in usertrap () at kernel/trap.c:67
+#6  0x0000000000000158 in ?? ()
+#1  0x0000000080003f56 in iunlock (ip=0x80015508 <itable+568>) at kernel/fs.c:350
+350	    panic("iunlock");
+$1 = 1
+$2 = (struct inode *) 0x80015508 <itable+568>
+$3 = {dev = 1, inum = 24, ref = 1, lock = {locked = 0, lk = {locked = 0, name = 0x8000b5b0 "sleep lock", cpu = 0x0}, name = 0x8000b430 "inode", pid = 0}, valid = 1, type = 4, major = 0, minor = 0, nlink = 0, size = 15, addrs = {630, 0 <repeats 12 times>}}
+Kill the program being debugged? (y or n) [answered Y; input not from terminal]
+[Inferior 1 (process 1) killed]
+----- Backtrace -----
+Backtrace unavailable
+---------------------
+$3 = {lock = {locked = 0, name = 0x8000b428 "itable", cpu = 0x0}, inode = {{dev = 1, inum = 1, ref = 3, lock = {locked = 0, lk = {locked = 0, name = 0x8000b5b0 "sleep lock", cpu = 0x0}, name = 0x8000b430 "inode", pid = 0}, valid = 1, type = 1, major = 0, minor = 0, nlink = 2, size = 1024, addrs = {70, 0 <repeats 12 times>}}, {dev = 1, inum = 21, ref = 1, lock = {locked = 0, lk = {locked = 0, name = 0x8000b5b0 "sleep lock", cpu = 0x0}, name = 0x8000b430 "inode", pid = 0}, valid = 1, type = 3, major = 1, minor = 0, nlink = 1, size = 0, addrs = {0 <repeats 13 times>}}, {dev = 1, inum = 22, ref = 1, lock = {locked = 1, lk = {locked = 0, name = 0x8000b5b0 "sleep lock", cpu = 0x0}, name = 0x8000b430 "inode", pid = 3}, valid = 1, type = 1, major = 0, minor = 0, nlink = 1, size = 64, addrs = {629, 0 <repeats 12 times>}}, {dev = 1, inum = 24, ref = 1, lock = {locked = 1, lk = {locked = 0, name = 0x8000b5b0 "sleep lock", cpu = 0x0}, name = 0x8000b430 "inode", pid = 3}, valid = 1, type = 0, major = 0, minor = 0, nlink = 0, size = 0, addrs = {0 <repeats 13 times>}}, {dev = 0, inum = 0, ref = 0, lock = {locked = 0, lk = {locked = 0, name = 0x8000b5b0 "sleep lock", cpu = 0x0}, name = 0x8000b430 "inode", pid = 0}, valid = 0, type = 0, major = 0, minor = 0, nlink = 0, size = 0, addrs = {0 <repeats 13 times>}} <repeats 46 times>}}
+$4 = {dev = 1, inum = 22, ref = 1, lock = {locked = 1, lk = {locked = 0, name = 0x8000b5b0 "sleep lock", cpu = 0x0}, name = 0x8000b430 "inode", pid = 3}, valid = 1, type = 1, major = 0, minor = 0, nlink = 1, size = 64, addrs = {629, 0 <repeats 12 times>}}
+Kill the program being debugged? (y or n) [answered Y; input not from terminal]
+[Inferior 1 (process 1) killed]
+----- Backtrace -----
+Backtrace unavailable
+---------------------
+$4 = {lock = {locked = 0, name = 0x8000b428 "itable", cpu = 0x0}, inode = {{dev = 1, inum = 1, ref = 4, lock = {locked = 1, lk = {locked = 0, name = 0x8000b5b0 "sleep lock", cpu = 0x0}, name = 0x8000b430 "inode", pid = 3}, valid = 1, type = 1, major = 0, minor = 0, nlink = 2, size = 1024, addrs = {70, 0 <repeats 12 times>}}, {dev = 1, inum = 21, ref = 1, lock = {locked = 0, lk = {locked = 0, name = 0x8000b5b0 "sleep lock", cpu = 0x0}, name = 0x8000b430 "inode", pid = 0}, valid = 1, type = 3, major = 1, minor = 0, nlink = 1, size = 0, addrs = {0 <repeats 13 times>}}, {dev = 1, inum = 19, ref = 0, lock = {locked = 0, lk = {locked = 0, name = 0x8000b5b0 "sleep lock", cpu = 0x0}, name = 0x8000b430 "inode", pid = 0}, valid = 1, type = 2, major = 0, minor = 0, nlink = 1, size = 35696, addrs = {567, 568, 569, 570, 571, 572, 573, 574, 575, 576, 577, 578, 0}}, {dev = 0, inum = 0, ref = 0, lock = {locked = 0, lk = {locked = 0, name = 0x8000b5b0 "sleep lock", cpu = 0x0}, name = 0x8000b430 "inode", pid = 0}, valid = 0, type = 0, major = 0, minor = 0, nlink = 0, size = 0, addrs = {0 <repeats 13 times>}} <repeats 47 times>}}
+$5 = 22
+acquire (lk=0x80015320 <itable>) at kernel/spinlock.c:24
+24	  push_off(); // disable interrupts to avoid deadlock.
+Run till exit from #0  acquire (lk=0x80015320 <itable>) at kernel/spinlock.c:24
+iget (dev=1, inum=22) at kernel/fs.c:280
+280	  empty = 0;
+281	  for(ip = &itable.inode[0]; ip < &itable.inode[NINODE]; ip++){
+282	    if(ip->ref > 0 && ip->dev == dev && ip->inum == inum){
+287	    if(empty == 0 && ip->ref == 0)    // Remember empty slot.
+281	  for(ip = &itable.inode[0]; ip < &itable.inode[NINODE]; ip++){
+282	    if(ip->ref > 0 && ip->dev == dev && ip->inum == inum){
+287	    if(empty == 0 && ip->ref == 0)    // Remember empty slot.
+281	  for(ip = &itable.inode[0]; ip < &itable.inode[NINODE]; ip++){
+282	    if(ip->ref > 0 && ip->dev == dev && ip->inum == inum){
+287	    if(empty == 0 && ip->ref == 0)    // Remember empty slot.
+288	      empty = ip;
+281	  for(ip = &itable.inode[0]; ip < &itable.inode[NINODE]; ip++){
+282	    if(ip->ref > 0 && ip->dev == dev && ip->inum == inum){
+287	    if(empty == 0 && ip->ref == 0)    // Remember empty slot.
+281	  for(ip = &itable.inode[0]; ip < &itable.inode[NINODE]; ip++){
+282	    if(ip->ref > 0 && ip->dev == dev && ip->inum == inum){
+287	    if(empty == 0 && ip->ref == 0)    // Remember empty slot.
+281	  for(ip = &itable.inode[0]; ip < &itable.inode[NINODE]; ip++){
+282	    if(ip->ref > 0 && ip->dev == dev && ip->inum == inum){
+287	    if(empty == 0 && ip->ref == 0)    // Remember empty slot.
+281	  for(ip = &itable.inode[0]; ip < &itable.inode[NINODE]; ip++){
+282	    if(ip->ref > 0 && ip->dev == dev && ip->inum == inum){
+287	    if(empty == 0 && ip->ref == 0)    // Remember empty slot.
+281	  for(ip = &itable.inode[0]; ip < &itable.inode[NINODE]; ip++){
+282	    if(ip->ref > 0 && ip->dev == dev && ip->inum == inum){
+287	    if(empty == 0 && ip->ref == 0)    // Remember empty slot.
+281	  for(ip = &itable.inode[0]; ip < &itable.inode[NINODE]; ip++){
+Undefined command: "ss".  Try "help".
+282	    if(ip->ref > 0 && ip->dev == dev && ip->inum == inum){
+287	    if(empty == 0 && ip->ref == 0)    // Remember empty slot.
+Breakpoint 6 at 0x80003d36: file kernel/fs.c, line 292.
+Continuing.
+
+Breakpoint 6, iget (dev=1, inum=22) at kernel/fs.c:292
+292	  if(empty == 0)
+$6 = (struct inode *) 0x80015448 <itable+296>
+$7 = {dev = 1, inum = 19, ref = 0, lock = {locked = 0, lk = {locked = 0, name = 0x8000b5b0 "sleep lock", cpu = 0x0}, name = 0x8000b430 "inode", pid = 0}, valid = 1, type = 2, major = 0, minor = 0, nlink = 1, size = 35696, addrs = {567, 568, 569, 570, 571, 572, 573, 574, 575, 576, 577, 578, 0}}
+295	  ip = empty;
+296	  ip->dev = dev;
+297	  ip->inum = inum;
+298	  ip->ref = 1;
+$8 = {dev = 1, inum = 22, ref = 0, lock = {locked = 0, lk = {locked = 0, name = 0x8000b5b0 "sleep lock", cpu = 0x0}, name = 0x8000b430 "inode", pid = 0}, valid = 1, type = 2, major = 0, minor = 0, nlink = 1, size = 35696, addrs = {567, 568, 569, 570, 571, 572, 573, 574, 575, 576, 577, 578, 0}}
+Run till exit from #0  iget (dev=1, inum=22) at kernel/fs.c:298
+0x0000000080004af8 in dirlookup (dp=0x80015338 <itable+24>, name=0x3fffff9f50 "testsymlink", poff=0x0) at kernel/fs.c:738
+738	      return iget(dp->dev, inum); // 返回未锁定的 inode
+Value returned is $9 = (struct inode *) 0x80015448 <itable+296>
+#0  0x0000000080004af8 in dirlookup (dp=0x80015338 <itable+24>, name=0x3fffff9f50 "testsymlink", poff=0x0) at kernel/fs.c:738
+#1  0x0000000080004dc4 in namex (path=0x3fffff9edd "a", nameiparent=1, name=0x3fffff9f50 "testsymlink") at kernel/fs.c:848
+#2  0x0000000080004e80 in nameiparent (path=0x3fffff9ed0 "/testsymlink/a", name=0x3fffff9f50 "testsymlink") at kernel/fs.c:872
+#3  0x0000000080006d1a in sys_unlink () at kernel/sysfile.c:233
+#4  0x0000000080002f36 in syscall () at kernel/syscall.c:143
+#5  0x000000008000286c in usertrap () at kernel/trap.c:67
+#6  0x0000000000000062 in ?? ()
+$10 = {dev = 1, inum = 1, ref = 4, lock = {locked = 1, lk = {locked = 0, name = 0x8000b5b0 "sleep lock", cpu = 0x0}, name = 0x8000b430 "inode", pid = 3}, valid = 1, type = 1, major = 0, minor = 0, nlink = 2, size = 1024, addrs = {70, 0 <repeats 12 times>}}
+Breakpoint 7 at 0x80006d1e: file kernel/sysfile.c, line 237.
+Continuing.
+
+Breakpoint 7, sys_unlink () at kernel/sysfile.c:237
+237	  printf("sys_unlink name:%s\n", name);
+$11 = {dev = 1, inum = 22, ref = 1, lock = {locked = 0, lk = {locked = 0, name = 0x8000b5b0 "sleep lock", cpu = 0x0}, name = 0x8000b430 "inode", pid = 0}, valid = 1, type = 1, major = 0, minor = 0, nlink = 1, size = 64, addrs = {629, 0 <repeats 12 times>}}
+Breakpoint 8 at 0x80006d84: file kernel/sysfile.c, line 246.
+Continuing.
+
+Breakpoint 2, sys_unlink () at kernel/sysfile.c:222
+222	{
+#0  sys_unlink () at kernel/sysfile.c:222
+#1  0x0000000080002f36 in syscall () at kernel/syscall.c:143
+#2  0x000000008000286c in usertrap () at kernel/trap.c:67
+#3  0x0000000000000072 in ?? ()
+Breakpoint 9 at 0x80006d3c: file kernel/sysfile.c, line 241.
+Continuing.
+
+Breakpoint 5, dirlookup (dp=0x80015338 <itable+24>, name=0x3fffff9f50 "testsymlink", poff=0x0) at kernel/fs.c:738
+738	      return iget(dp->dev, inum); // 返回未锁定的 inode
+$12 = 22
+iget (dev=1, inum=22) at kernel/fs.c:277
+277	  acquire(&itable.lock);
+$13 = {lock = {locked = 0, name = 0x8000b428 "itable", cpu = 0x0}, inode = {{dev = 1, inum = 1, ref = 4, lock = {locked = 1, lk = {locked = 0, name = 0x8000b5b0 "sleep lock", cpu = 0x0}, name = 0x8000b430 "inode", pid = 3}, valid = 1, type = 1, major = 0, minor = 0, nlink = 2, size = 1024, addrs = {70, 0 <repeats 12 times>}}, {dev = 1, inum = 21, ref = 1, lock = {locked = 0, lk = {locked = 0, name = 0x8000b5b0 "sleep lock", cpu = 0x0}, name = 0x8000b430 "inode", pid = 0}, valid = 1, type = 3, major = 1, minor = 0, nlink = 1, size = 0, addrs = {0 <repeats 13 times>}}, {dev = 1, inum = 22, ref = 0, lock = {locked = 0, lk = {locked = 0, name = 0x8000b5b0 "sleep lock", cpu = 0x0}, name = 0x8000b430 "inode", pid = 0}, valid = 1, type = 1, major = 0, minor = 0, nlink = 1, size = 64, addrs = {629, 0 <repeats 12 times>}}, {dev = 0, inum = 0, ref = 0, lock = {locked = 0, lk = {locked = 0, name = 0x8000b5b0 "sleep lock", cpu = 0x0}, name = 0x8000b430 "inode", pid = 0}, valid = 0, type = 0, major = 0, minor = 0, nlink = 0, size = 0, addrs = {0 <repeats 13 times>}} <repeats 47 times>}}
+Note: breakpoint 6 also set at pc 0x80003d36.
+Breakpoint 10 at 0x80003d36: file kernel/fs.c, line 292.
+Continuing.
+
+Breakpoint 6, iget (dev=1, inum=22) at kernel/fs.c:292
+292	  if(empty == 0)
+$14 = {dev = 1, inum = 22, ref = 0, lock = {locked = 0, lk = {locked = 0, name = 0x8000b5b0 "sleep lock", cpu = 0x0}, name = 0x8000b430 "inode", pid = 0}, valid = 1, type = 1, major = 0, minor = 0, nlink = 1, size = 64, addrs = {629, 0 <repeats 12 times>}}
+Undefined command: "finsih".  Try "help".
+Run till exit from #0  iget (dev=1, inum=22) at kernel/fs.c:292
+0x0000000080004af8 in dirlookup (dp=0x80015338 <itable+24>, name=0x3fffff9f50 "testsymlink", poff=0x0) at kernel/fs.c:738
+738	      return iget(dp->dev, inum); // 返回未锁定的 inode
+Value returned is $15 = (struct inode *) 0x80015448 <itable+296>
+Run till exit from #0  0x0000000080004af8 in dirlookup (dp=0x80015338 <itable+24>, name=0x3fffff9f50 "testsymlink", poff=0x0) at kernel/fs.c:738
+0x0000000080004dc4 in namex (path=0x3fffff9edd "b", nameiparent=1, name=0x3fffff9f50 "testsymlink") at kernel/fs.c:848
+848	    if((next = dirlookup(ip, name, 0)) == 0){
+Value returned is $16 = (struct inode *) 0x80015448 <itable+296>
+852	    iunlockput(ip);
+$17 = {dev = 1, inum = 22, ref = 1, lock = {locked = 0, lk = {locked = 0, name = 0x8000b5b0 "sleep lock", cpu = 0x0}, name = 0x8000b430 "inode", pid = 0}, valid = 0, type = 1, major = 0, minor = 0, nlink = 1, size = 64, addrs = {629, 0 <repeats 12 times>}}
+$18 = 0
+853	    ip = next;
+$19 = {dev = 1, inum = 1, ref = 3, lock = {locked = 0, lk = {locked = 0, name = 0x8000b5b0 "sleep lock", cpu = 0x0}, name = 0x8000b430 "inode", pid = 0}, valid = 1, type = 1, major = 0, minor = 0, nlink = 2, size = 1024, addrs = {70, 0 <repeats 12 times>}}
+838	  while((path = skipelem(path, name)) != 0){
+839	    ilock(ip);
+840	    if(ip->type != T_DIR){
+844	    if (nameiparent && *path == '\0') {
+$20 = 1
+$21 = 0 '\000'
+845	        iunlock(ip);    // 解锁但不释放（父目录 inode 需返回）
+iunlock (ip=0x80015448 <itable+296>) at kernel/fs.c:349
+349	  if(ip == 0 || !holdingsleep(&ip->lock) || ip->ref < 1)
+Run till exit from #0  iunlock (ip=0x80015448 <itable+296>) at kernel/fs.c:349
+namex (path=0x3fffff9ede "", nameiparent=1, name=0x3fffff9f50 "b") at kernel/fs.c:846
+846	        return ip;      // 返回父目录 inode
+$22 = {dev = 1, inum = 22, ref = 1, lock = {locked = 0, lk = {locked = 0, name = 0x8000b5b0 "sleep lock", cpu = 0x0}, name = 0x8000b430 "inode", pid = 0}, valid = 1, type = 1, major = 0, minor = 0, nlink = 1, size = 64, addrs = {629, 0 <repeats 12 times>}}
+Run till exit from #0  namex (path=0x3fffff9ede "", nameiparent=1, name=0x3fffff9f50 "b") at kernel/fs.c:846
+0x0000000080004e80 in nameiparent (path=0x3fffff9ed0 "/testsymlink/b", name=0x3fffff9f50 "b") at kernel/fs.c:872
+872	  return namex(path, 1, name);
+Value returned is $23 = (struct inode *) 0x80015448 <itable+296>
+Run till exit from #0  0x0000000080004e80 in nameiparent (path=0x3fffff9ed0 "/testsymlink/b", name=0x3fffff9f50 "b") at kernel/fs.c:872
+0x0000000080006d1a in sys_unlink () at kernel/sysfile.c:233
+233	  if((dp = nameiparent(path, name)) == 0){
+Value returned is $24 = (struct inode *) 0x80015448 <itable+296>
+
+Breakpoint 7, sys_unlink () at kernel/sysfile.c:237
+237	  printf("sys_unlink name:%s\n", name);
+$25 = {dev = 1, inum = 22, ref = 1, lock = {locked = 0, lk = {locked = 0, name = 0x8000b5b0 "sleep lock", cpu = 0x0}, name = 0x8000b430 "inode", pid = 0}, valid = 1, type = 1, major = 0, minor = 0, nlink = 1, size = 64, addrs = {629, 0 <repeats 12 times>}}
+printf (fmt=0x8000b650 "sys_unlink name:%s\n") at kernel/printf.c:70
+70	  locking = pr.locking;
+Run till exit from #0  printf (fmt=0x8000b650 "sys_unlink name:%s\n") at kernel/printf.c:70
+sys_unlink () at kernel/sysfile.c:238
+238	  ilock(dp);
+Breakpoint 11 at 0x80006d6c: file kernel/sysfile.c, line 244.
+
+Breakpoint 9, sys_unlink () at kernel/sysfile.c:241
+241	  if(namecmp(name, ".") == 0 || namecmp(name, "..") == 0)
+Note: breakpoint 9 also set at pc 0x80006d3c.
+Breakpoint 12 at 0x80006d3c: file kernel/sysfile.c, line 241.
+
+Breakpoint 11, sys_unlink () at kernel/sysfile.c:244
+244	  if((ip = dirlookup(dp, name, &off)) == 0)
+$26 = "b\000stsymlink\000\000"
+$27 = 98 'b'
+$28 = {dev = 1, inum = 22, ref = 1, lock = {locked = 1, lk = {locked = 0, name = 0x8000b5b0 "sleep lock", cpu = 0x0}, name = 0x8000b430 "inode", pid = 3}, valid = 1, type = 1, major = 0, minor = 0, nlink = 1, size = 64, addrs = {629, 0 <repeats 12 times>}}
+dirlookup (dp=0x80015448 <itable+296>, name=0x3fffff9f50 "b", poff=0x3fffff9ecc) at kernel/fs.c:721
+721	  if(dp->type != T_DIR)
+Note: breakpoint 5 also set at pc 0x80004ae2.
+Breakpoint 13 at 0x80004ae2: file kernel/fs.c, line 738.
+Continuing.
+
+Breakpoint 5, dirlookup (dp=0x80015448 <itable+296>, name=0x3fffff9f50 "b", poff=0x3fffff9ecc) at kernel/fs.c:738
+738	      return iget(dp->dev, inum); // 返回未锁定的 inode
+$29 = 0x3fffff9f50 "b"
+$30 = 24
+iget (dev=1, inum=24) at kernel/fs.c:277
+277	  acquire(&itable.lock);
+$31 = {lock = {locked = 0, name = 0x8000b428 "itable", cpu = 0x0}, inode = {{dev = 1, inum = 1, ref = 3, lock = {locked = 0, lk = {locked = 0, name = 0x8000b5b0 "sleep lock", cpu = 0x0}, name = 0x8000b430 "inode", pid = 0}, valid = 1, type = 1, major = 0, minor = 0, nlink = 2, size = 1024, addrs = {70, 0 <repeats 12 times>}}, {dev = 1, inum = 21, ref = 1, lock = {locked = 0, lk = {locked = 0, name = 0x8000b5b0 "sleep lock", cpu = 0x0}, name = 0x8000b430 "inode", pid = 0}, valid = 1, type = 3, major = 1, minor = 0, nlink = 1, size = 0, addrs = {0 <repeats 13 times>}}, {dev = 1, inum = 22, ref = 1, lock = {locked = 1, lk = {locked = 0, name = 0x8000b5b0 "sleep lock", cpu = 0x0}, name = 0x8000b430 "inode", pid = 3}, valid = 1, type = 1, major = 0, minor = 0, nlink = 1, size = 64, addrs = {629, 0 <repeats 12 times>}}, {dev = 0, inum = 0, ref = 0, lock = {locked = 0, lk = {locked = 0, name = 0x8000b5b0 "sleep lock", cpu = 0x0}, name = 0x8000b430 "inode", pid = 0}, valid = 0, type = 0, major = 0, minor = 0, nlink = 0, size = 0, addrs = {0 <repeats 13 times>}} <repeats 47 times>}}
+Note: breakpoints 6 and 10 also set at pc 0x80003d36.
+Breakpoint 14 at 0x80003d36: file kernel/fs.c, line 292.
+Continuing.
+
+Breakpoint 6, iget (dev=1, inum=24) at kernel/fs.c:292
+292	  if(empty == 0)
+No symbol "emtpy" in current context.
+$32 = {dev = 0, inum = 0, ref = 0, lock = {locked = 0, lk = {locked = 0, name = 0x8000b5b0 "sleep lock", cpu = 0x0}, name = 0x8000b430 "inode", pid = 0}, valid = 0, type = 0, major = 0, minor = 0, nlink = 0, size = 0, addrs = {0 <repeats 13 times>}}
+Kill the program being debugged? (y or n) [answered Y; input not from terminal]
+[Inferior 1 (process 1) killed]
+----- Backtrace -----
+Backtrace unavailable
+---------------------

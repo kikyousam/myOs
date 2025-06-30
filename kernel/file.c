@@ -32,7 +32,7 @@ filealloc(void)
   struct file *f;
 
   acquire(&ftable.lock);
-  for(f = ftable.file; f < ftable.file + NFILE; f++){
+  for(f = ftable.file; f < ftable.file + NFILE; f++){  //遍历ftable寻找一个未被引用的file
     if(f->ref == 0){
       f->ref = 1;
       release(&ftable.lock);
